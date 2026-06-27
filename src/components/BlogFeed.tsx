@@ -3,7 +3,53 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { blogPosts as fallbackPosts, BlogPost } from "../data/blogs";
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  tags: string[];
+  link: string;
+  imageUrl?: string;
+}
+
+function BlogSkeleton() {
+  return (
+    <div className="divide-y divide-border-custom flex flex-col w-full">
+      {[1, 2, 3].map((item) => (
+        <div
+          key={item}
+          className="py-8 first:pt-0 last:pb-0 flex flex-col sm:flex-row gap-6 justify-between items-start w-full animate-pulse"
+        >
+          <div className="flex-1 flex flex-col justify-between h-full w-full">
+            <div>
+              {/* Title skeleton */}
+              <div className="h-6 bg-zinc-200 dark:bg-zinc-800 rounded w-3/4 mb-3" />
+              {/* Excerpt lines skeleton */}
+              <div className="space-y-2">
+                <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-full" />
+                <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-5/6" />
+                <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded w-2/3" />
+              </div>
+            </div>
+            {/* Tags and read button skeleton */}
+            <div className="mt-6 flex items-center justify-between gap-4 w-full">
+              <div className="flex flex-wrap gap-1.5">
+                <div className="h-5 w-12 bg-zinc-200 dark:bg-zinc-800 rounded" />
+                <div className="h-5 w-16 bg-zinc-200 dark:bg-zinc-800 rounded" />
+              </div>
+              <div className="h-4 w-20 bg-zinc-200 dark:bg-zinc-800 rounded" />
+            </div>
+          </div>
+          {/* Image skeleton */}
+          <div className="w-full sm:w-40 md:w-48 shrink-0 aspect-[16/10] sm:aspect-[4/3] rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function BlogFeed() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -19,11 +65,11 @@ export default function BlogFeed() {
         if (data.posts && Array.isArray(data.posts) && data.posts.length > 0) {
           setPosts(data.posts);
         } else {
-          setPosts(fallbackPosts);
+          setPosts([]);
         }
       } catch (err) {
-        console.error("Failed to load dynamic blog feed, using fallback:", err);
-        setPosts(fallbackPosts);
+        console.error("Failed to load dynamic blog feed:", err);
+        setPosts([]);
       } finally {
         setIsLoading(false);
       }
@@ -31,8 +77,30 @@ export default function BlogFeed() {
     fetchBlogs();
   }, []);
 
-  const displayPosts = posts.length > 0 ? posts : fallbackPosts;
-  const slicedPosts = displayPosts.slice(0, visibleCount);
+  if (isLoading) {
+    return <BlogSkeleton />;
+  }
+
+  if (posts.length === 0) {
+    return (
+      <div className="text-center py-12 px-4 border border-dashed border-border-custom rounded-lg bg-zinc-50/50 dark:bg-zinc-900/30 max-w-4xl mx-auto">
+        <p className="text-sm text-muted-text font-sans mb-4">
+          Unable to load recent articles at this moment.
+        </p>
+        <a
+          href="https://tanyas27.medium.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-accent-custom hover:text-accent-dark transition-colors duration-200"
+        >
+          <span>Read all articles directly on Medium</span>
+          <ArrowRight size={14} />
+        </a>
+      </div>
+    );
+  }
+
+  const slicedPosts = posts.slice(0, visibleCount);
 
   return (
     <div className="max-w-4xl mx-auto flex flex-col gap-8">
@@ -110,7 +178,7 @@ export default function BlogFeed() {
       </div>
 
       {/* Load More Button */}
-      {visibleCount < displayPosts.length && (
+      {visibleCount < posts.length && (
         <div className="flex justify-center mt-4">
           <button
             onClick={() => setVisibleCount((prev) => prev + 3)}
