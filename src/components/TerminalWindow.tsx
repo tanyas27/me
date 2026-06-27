@@ -58,13 +58,13 @@ export default function TerminalWindow() {
   return (
     <div className="w-full max-w-5xl mx-auto bg-card-custom rounded-xl border border-border-custom shadow-2xl overflow-hidden font-sans relative">
       {/* Top Window Bar */}
-      <div className="bg-zinc-100 dark:bg-[#1A1B18] px-6 py-5 flex items-center justify-between border-b border-border-custom transition-colors duration-300">
+      <div className="bg-zinc-100 dark:bg-[#1A1B18] px-4 py-3 sm:px-6 sm:py-5 flex items-center justify-between border-b border-border-custom transition-colors duration-300">
         {/* mac dots */}
         <div className="flex items-center space-x-2">
-          <div className="w-3.5 h-3.5 rounded-full bg-red-400/90 dark:bg-red-500/70" />
-          <div className="w-3.5 h-3.5 rounded-full bg-yellow-400/90 dark:bg-yellow-500/70" />
-          <div className="w-3.5 h-3.5 rounded-full bg-green-400/90 dark:bg-green-500/70" />
-          <span className="ml-4 text-xs font-mono text-muted-text font-semibold select-none">
+          <div className="w-3 h-3 rounded-full bg-red-400/90 dark:bg-red-500/70" />
+          <div className="w-3 h-3 rounded-full bg-yellow-400/90 dark:bg-yellow-500/70" />
+          <div className="w-3 h-3 rounded-full bg-green-400/90 dark:bg-green-500/70" />
+          <span className="ml-2 sm:ml-4 text-xs font-mono text-muted-text font-semibold select-none hidden sm:inline">
             zsh in tanya-portfolio
           </span>
         </div>
@@ -75,7 +75,7 @@ export default function TerminalWindow() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-5 py-2 rounded-md text-xs font-mono font-bold tracking-wide uppercase transition-all duration-300 cursor-pointer ${
+              className={`px-3 py-1.5 sm:px-5 sm:py-2 rounded-md text-[10px] sm:text-xs font-mono font-bold tracking-wide uppercase transition-all duration-300 cursor-pointer ${
                 activeTab === tab
                   ? "bg-white dark:bg-zinc-800 text-foreground shadow-md"
                   : "text-zinc-600 dark:text-muted-text hover:text-zinc-950 dark:hover:text-foreground"
@@ -88,7 +88,7 @@ export default function TerminalWindow() {
       </div>
 
       {/* Terminal Window Content Screen */}
-      <div className="p-8 md:p-12 min-h-[500px] relative bg-card-custom transition-colors duration-300">
+      <div className="p-4 sm:p-8 md:p-12 min-h-[500px] relative bg-card-custom transition-colors duration-300">
         <AnimatePresence mode="wait">
           {/* EXPERIENCE TAB */}
           {activeTab === "experience" && (
@@ -101,17 +101,17 @@ export default function TerminalWindow() {
               className="space-y-16"
             >
               {portfolioData.experience.map((job) => (
-                <div key={job.id} className="group relative border-l-2 border-zinc-300 dark:border-zinc-800 pl-8 ml-4 transition-colors duration-300">
+                <div key={job.id} className="group relative border-l-2 border-zinc-300 dark:border-zinc-800 pl-4 ml-1 sm:pl-8 sm:ml-4 transition-colors duration-300">
                   {/* Timeline dot */}
                   <div className="absolute -left-[7px] top-2.5 w-3.5 h-3.5 rounded-full bg-zinc-400 dark:bg-zinc-700 group-hover:bg-accent-dark dark:group-hover:bg-accent-custom transition-all duration-300 border-4 border-card-custom" />
                   
                   {/* Header containing title, company, dates */}
                   <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
                     <div>
-                      <h3 className="text-xl md:text-2xl font-serif font-bold text-foreground tracking-tight">
+                      <h3 className="text-base sm:text-xl md:text-2xl font-serif font-bold text-foreground tracking-tight">
                         {job.role}
                       </h3>
-                      <p className="text-sm md:text-base font-semibold text-accent-dark dark:text-accent-custom font-mono mt-1">
+                      <p className="text-xs sm:text-sm md:text-base font-semibold text-accent-dark dark:text-accent-custom font-mono mt-1">
                         {job.company}
                       </p>
                     </div>
@@ -167,17 +167,17 @@ export default function TerminalWindow() {
               className="space-y-10"
             >
               {portfolioData.education.map((edu, idx) => (
-                <div key={idx} className="group relative border-l-2 border-zinc-300 dark:border-zinc-800 pl-8 ml-4 transition-colors duration-300">
+                <div key={idx} className="group relative border-l-2 border-zinc-300 dark:border-zinc-800 pl-4 ml-1 sm:pl-8 sm:ml-4 transition-colors duration-300">
                   {/* Timeline dot */}
                   <div className="absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full bg-zinc-400 dark:bg-zinc-700 group-hover:bg-accent-dark dark:group-hover:bg-accent-custom transition-all duration-300 border-4 border-card-custom" />
                   
                   <span className="text-xs md:text-sm font-mono font-bold text-accent-dark dark:text-accent-custom">
                     {edu.period}
                   </span>
-                  <h3 className="text-lg md:text-xl font-serif font-bold text-foreground tracking-tight mt-1">
+                  <h3 className="text-base sm:text-lg md:text-xl font-serif font-bold text-foreground tracking-tight mt-1">
                     {edu.degree}
                   </h3>
-                  <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-300 font-serif italic mt-1.5">
+                  <p className="text-xs sm:text-sm md:text-base text-zinc-700 dark:text-zinc-300 font-serif italic mt-1.5">
                     {edu.institution}
                   </p>
                 </div>
@@ -237,10 +237,10 @@ export default function TerminalWindow() {
         </AnimatePresence>
 
         {/* Play Action Float Trigger (Bottom Right) */}
-        <div className="absolute bottom-8 right-8 z-40">
+        <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-40">
           <button
             onClick={handlePlayClick}
-            className={`p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer ${
+            className={`p-3.5 sm:p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer ${
               isPlaying
                 ? "bg-rose-500 text-white hover:bg-rose-600 shadow-rose-500/20"
                 : "bg-accent-custom text-white hover:bg-accent-dark shadow-accent-custom/20"

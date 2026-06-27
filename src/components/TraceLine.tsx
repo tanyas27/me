@@ -221,6 +221,16 @@ export default function TraceLine() {
     return 0;
   });
 
+  // Vertical offset: center-aligned during slide, feet-aligned (87.5%) when walking/sitting on the footer floor
+  const yOffset = useTransform(scrollYProgress, (p) => {
+    if (p < 0.97) return "-50%";
+    if (p < 0.98) {
+      const t = (p - 0.97) / 0.01;
+      return `${-50 - t * 37.5}%`;
+    }
+    return "-87.5%";
+  });
+
   useEffect(() => {
     setMounted(true);
     
@@ -245,8 +255,8 @@ export default function TraceLine() {
   if (!mounted) return null;
 
   return (
-    /* Stretches down to exactly above the footer (approx 280px tall) */
-    <div className="absolute left-6 md:left-12 lg:left-24 top-[220px] bottom-[280px] w-8 pointer-events-none z-20 hidden md:block">
+    /* Stretches down to exactly above the footer (approx 115px tall) */
+    <div className="absolute left-6 md:left-12 lg:left-24 top-[220px] bottom-[115px] w-8 pointer-events-none z-20 hidden md:block">
       {/* Background slide pole (Z-INDEX: 20) */}
       <div className="absolute top-0 bottom-0 left-[15px] w-[2px] bg-zinc-200 dark:bg-zinc-800/80 transition-colors duration-300 z-20" />
 
@@ -266,7 +276,7 @@ export default function TraceLine() {
           scale: charScale,
           scaleX: isFlipped ? -1 : 1,
           rotate: rotatePos,
-          y: "-50%",
+          y: yOffset,
           left: isFlipped ? "-34px" : "-10px", 
         }}
       >

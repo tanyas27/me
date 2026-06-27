@@ -62,7 +62,7 @@ function createLuminanceBumpMap(source: THREE.Texture) {
   return bump;
 }
 
-function AstroMechanics({ isActive, isDarkMode }: { isActive: boolean; isDarkMode: boolean }) {
+function AstroMechanics({ isActive, isDarkMode, isMobile, moonTexture }: { isActive: boolean; isDarkMode: boolean; isMobile: boolean; moonTexture: THREE.Texture }) {
   const moonRef = useRef<THREE.Mesh>(null);
   const moonGroupRef = useRef<THREE.Group>(null);
   const trailPointsRef = useRef<THREE.Points>(null);
@@ -87,11 +87,10 @@ function AstroMechanics({ isActive, isDarkMode }: { isActive: boolean; isDarkMod
   // Track previous coordinates to compute mouse travel speed
   const lastMousePos = useRef(new THREE.Vector3(0, 0, 0));
 
-  const moonColorMap = useLoader(THREE.TextureLoader, MOON_TEXTURE_PATH);
   const moonBumpMap = useMemo(() => {
-    configureMoonTexture(moonColorMap);
-    return createLuminanceBumpMap(moonColorMap);
-  }, [moonColorMap]);
+    if (isMobile || !moonTexture) return null;
+    return createLuminanceBumpMap(moonTexture);
+  }, [moonTexture, isMobile]);
 
   useEffect(() => {
     return () => {
@@ -151,70 +150,72 @@ function AstroMechanics({ isActive, isDarkMode }: { isActive: boolean; isDarkMod
     state.camera.lookAt(0, 0, 0);
 
     // 4. Track mouse speed and spawn magic trail particles
-    const distMoved = mouse3D.distanceTo(lastMousePos.current);
-    lastMousePos.current.copy(mouse3D);
+    if (!isMobile) {
+      const distMoved = mouse3D.distanceTo(lastMousePos.current);
+      lastMousePos.current.copy(mouse3D);
 
-    if (distMoved > 0.03 && trailRef.current.length < 180) {
-      const spawnCount = Math.min(6, Math.floor(distMoved * 65));
-      for (let i = 0; i < spawnCount; i++) {
-        trailRef.current.push({
-          pos: mouse3D.clone().add(new THREE.Vector3(
-            (Math.random() - 0.5) * 0.15,
-            (Math.random() - 0.5) * 0.15,
-            (Math.random() - 0.5) * 0.15
-          )),
-          vel: new THREE.Vector3(
-            (Math.random() - 0.5) * 0.03,
-            (Math.random() - 0.5) * 0.03,
-            (Math.random() - 0.5) * 0.03
-          ),
-          age: 0,
-          maxAge: 25 + Math.random() * 20,
-          color: isDarkMode ? "#FFE082" : "#A77B4A",
-        });
+      if (distMoved > 0.03 && trailRef.current.length < 180) {
+        const spawnCount = Math.min(6, Math.floor(distMoved * 65));
+        for (let i = 0; i < spawnCount; i++) {
+          trailRef.current.push({
+            pos: mouse3D.clone().add(new THREE.Vector3(
+              (Math.random() - 0.5) * 0.15,
+              (Math.random() - 0.5) * 0.15,
+              (Math.random() - 0.5) * 0.15
+            )),
+            vel: new THREE.Vector3(
+              (Math.random() - 0.5) * 0.03,
+              (Math.random() - 0.5) * 0.03,
+              (Math.random() - 0.5) * 0.03
+            ),
+            age: 0,
+            maxAge: 25 + Math.random() * 20,
+            color: isDarkMode ? "#FFE082" : "#A77B4A",
+          });
+        }
       }
-    }
 
-    // Update trail particles lifecycle
-    trailRef.current.forEach((tp) => {
-      tp.pos.add(tp.vel);
-      tp.age += 1;
-    });
-    trailRef.current = trailRef.current.filter((tp) => tp.age < tp.maxAge);
+      // Update trail particles lifecycle
+      trailRef.current.forEach((tp) => {
+        tp.pos.add(tp.vel);
+        tp.age += 1;
+      });
+      trailRef.current = trailRef.current.filter((tp) => tp.age < tp.maxAge);
 
-    // Render trail geometry (positions & colors)
-    const trailPositions = new Float32Array(trailRef.current.length * 3);
-    const trailColors = new Float32Array(trailRef.current.length * 3);
+      // Render trail geometry (positions & colors)
+      const trailPositions = new Float32Array(trailRef.current.length * 3);
+      const trailColors = new Float32Array(trailRef.current.length * 3);
 
-    trailRef.current.forEach((tp, idx) => {
-      trailPositions[idx * 3] = tp.pos.x;
-      trailPositions[idx * 3 + 1] = tp.pos.y;
-      trailPositions[idx * 3 + 2] = tp.pos.z;
+      trailRef.current.forEach((tp, idx) => {
+        trailPositions[idx * 3] = tp.pos.x;
+        trailPositions[idx * 3 + 1] = tp.pos.y;
+        trailPositions[idx * 3 + 2] = tp.pos.z;
 
-      const ratio = tp.age / tp.maxAge;
-      const fade = 1.0 - ratio;
+        const ratio = tp.age / tp.maxAge;
+        const fade = 1.0 - ratio;
 
-      // Golden sparks in dark mode, deeper bronze sparks in light mode
-      const r = isDarkMode ? 1.0 : 0.65;
-      const g = isDarkMode ? 0.88 : 0.49;
-      const b = isDarkMode ? 0.51 : 0.29;
+        // Golden sparks in dark mode, deeper bronze sparks in light mode
+        const r = isDarkMode ? 1.0 : 0.65;
+        const g = isDarkMode ? 0.88 : 0.49;
+        const b = isDarkMode ? 0.51 : 0.29;
 
-      trailColors[idx * 3] = r * fade;
-      trailColors[idx * 3 + 1] = g * fade;
-      trailColors[idx * 3 + 2] = b * fade;
-    });
+        trailColors[idx * 3] = r * fade;
+        trailColors[idx * 3 + 1] = g * fade;
+        trailColors[idx * 3 + 2] = b * fade;
+      });
 
-    if (trailPointsRef.current) {
-      trailPointsRef.current.geometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(trailPositions, 3)
-      );
-      trailPointsRef.current.geometry.setAttribute(
-        "color",
-        new THREE.Float32BufferAttribute(trailColors, 3)
-      );
-      trailPointsRef.current.geometry.attributes.position.needsUpdate = true;
-      trailPointsRef.current.geometry.attributes.color.needsUpdate = true;
+      if (trailPointsRef.current) {
+        trailPointsRef.current.geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(trailPositions, 3)
+        );
+        trailPointsRef.current.geometry.setAttribute(
+          "color",
+          new THREE.Float32BufferAttribute(trailColors, 3)
+        );
+        trailPointsRef.current.geometry.attributes.position.needsUpdate = true;
+        trailPointsRef.current.geometry.attributes.color.needsUpdate = true;
+      }
     }
   });
 
@@ -231,9 +232,9 @@ function AstroMechanics({ isActive, isDarkMode }: { isActive: boolean; isDarkMod
 
         {/* 3D Moon mesh */}
         <mesh ref={moonRef}>
-          <sphereGeometry args={[1.8, 96, 96]} />
+          <sphereGeometry args={isMobile ? [1.8, 32, 32] : [1.8, 96, 96]} />
           <meshStandardMaterial
-            map={moonColorMap}
+            map={moonTexture}
             bumpMap={moonBumpMap ?? undefined}
             bumpScale={0.55}
             roughness={1}
@@ -243,29 +244,33 @@ function AstroMechanics({ isActive, isDarkMode }: { isActive: boolean; isDarkMod
         </mesh>
 
         {/* Subtle rim catch-light — no colored atmosphere tint */}
-        <mesh>
-          <sphereGeometry args={[1.805, 64, 64]} />
-          <meshBasicMaterial
-            color="#FFFFFF"
-            transparent={true}
-            opacity={isDarkMode ? 0.04 : 0.06}
-            blending={THREE.AdditiveBlending}
-            side={THREE.BackSide}
-          />
-        </mesh>
+        {!isMobile && (
+          <mesh>
+            <sphereGeometry args={[1.805, 64, 64]} />
+            <meshBasicMaterial
+              color="#FFFFFF"
+              transparent={true}
+              opacity={isDarkMode ? 0.04 : 0.06}
+              blending={THREE.AdditiveBlending}
+              side={THREE.BackSide}
+            />
+          </mesh>
+        )}
       </group>
 
       {/* Interactive mouse trail */}
-      <points ref={trailPointsRef}>
-        <bufferGeometry />
-        <pointsMaterial
-          vertexColors={true}
-          size={0.06}
-          transparent={true}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </points>
+      {!isMobile && (
+        <points ref={trailPointsRef}>
+          <bufferGeometry />
+          <pointsMaterial
+            vertexColors={true}
+            size={0.06}
+            transparent={true}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </points>
+      )}
     </group>
   );
 }
@@ -274,12 +279,22 @@ export default function CelestialSphere() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isActive, setIsActive] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [moonTexture, setMoonTexture] = useState<THREE.Texture | null>(null);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     const container = containerRef.current;
     if (!container) return;
+
+    // Detect mobile viewport size
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
 
     // Reactively observe class toggle changes on html node to capture theme transitions
     const checkTheme = () => {
@@ -289,6 +304,21 @@ export default function CelestialSphere() {
 
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    // Preload texture manually with error handling
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      MOON_TEXTURE_PATH,
+      (txt) => {
+        configureMoonTexture(txt);
+        setMoonTexture(txt);
+      },
+      undefined,
+      (err) => {
+        console.error("Error loading moon texture:", err);
+        setLoadError(true);
+      }
+    );
 
     // contentVisibility performance observer
     const isCVSupported = "contentVisibility" in document.documentElement.style;
@@ -300,6 +330,7 @@ export default function CelestialSphere() {
       container.addEventListener("contentvisibilityautostatechange", handleStateChange);
       return () => {
         container.removeEventListener("contentvisibilityautostatechange", handleStateChange);
+        window.removeEventListener("resize", checkMobile);
         observer.disconnect();
       };
     } else {
@@ -314,16 +345,29 @@ export default function CelestialSphere() {
       nObserver.observe(container);
       return () => {
         nObserver.disconnect();
+        window.removeEventListener("resize", checkMobile);
         observer.disconnect();
       };
     }
   }, []);
 
-  if (!mounted) {
+  if (loadError) {
+    // Beautiful glowing CSS fallback orb instead of blank/broken canvas
     return (
       <div 
         ref={containerRef}
-        className="w-full h-full min-h-[500px] flex items-center justify-center bg-transparent"
+        className="w-full h-full min-h-[320px] md:min-h-[450px] lg:min-h-[550px] flex items-center justify-center relative overflow-hidden"
+      >
+        <div className="w-[180px] h-[180px] md:w-[240px] md:h-[240px] rounded-full bg-gradient-to-tr from-accent-dark/40 via-accent-custom to-accent-light/30 dark:from-accent-dark/30 dark:via-accent-custom dark:to-accent-light/10 shadow-[0_0_50px_rgba(213,167,110,0.3)] animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!mounted || !moonTexture) {
+    return (
+      <div 
+        ref={containerRef}
+        className="w-full h-full min-h-[320px] md:min-h-[450px] lg:min-h-[550px] flex items-center justify-center bg-transparent"
       />
     );
   }
@@ -331,18 +375,18 @@ export default function CelestialSphere() {
   return (
     <div
       ref={containerRef}
-      className="heavy-section relative w-full h-full min-h-[500px] flex items-center justify-center overflow-visible"
+      className="heavy-section relative w-full h-full min-h-[320px] md:min-h-[450px] lg:min-h-[550px] flex items-center justify-center overflow-visible"
       style={{
         contentVisibility: "auto",
-        containIntrinsicSize: "auto none auto 500px",
+        containIntrinsicSize: "auto none auto 320px",
       }}
     >
       {/* Three.js Canvas Scene */}
       <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 5], fov: 60 }} dpr={[1, 1.5]}>
+        <Canvas camera={{ position: [0, 0, 5], fov: 60 }} dpr={isMobile ? 1 : [1, 1.5]}>
           <ambientLight intensity={0.06} />
           <Suspense fallback={null}>
-            <AstroMechanics isActive={isActive} isDarkMode={isDarkMode} />
+            <AstroMechanics isActive={isActive} isDarkMode={isDarkMode} isMobile={isMobile} moonTexture={moonTexture} />
           </Suspense>
         </Canvas>
       </div>

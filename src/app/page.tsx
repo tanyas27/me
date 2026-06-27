@@ -116,7 +116,7 @@ export default function Home() {
             </div>
 
             {/* Right Column: 3D interactive scene sphere */}
-            <div className="lg:col-span-5 w-full h-[350px] md:h-[450px] lg:h-[550px] relative">
+            <div className="lg:col-span-5 w-full h-[320px] md:h-[450px] lg:h-[550px] relative">
               <CelestialSphere />
             </div>
           </div>

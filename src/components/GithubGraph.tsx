@@ -98,7 +98,10 @@ export default function GithubGraph() {
             Open Source & Git Activity
           </h3>
           <p className="text-xs text-muted-text mt-1">
-            Simulated workspace commit logs analyzing local and remote repositories
+            Simulated workspace commit logs analyzing local and remote repositories.
+            <span className="block md:hidden text-[10px] text-accent-custom mt-1 font-semibold animate-pulse">
+              Swipe left to view full graph &rarr;
+            </span>
           </p>
         </div>
 
