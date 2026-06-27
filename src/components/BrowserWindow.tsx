@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, RotateCw, Lock, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, RotateCw, Lock, Plus, X } from "lucide-react";
 import { portfolioData } from "../data/portfolio";
 import GithubGraph from "./GithubGraph";
 
@@ -10,34 +10,64 @@ type TabType = "experience" | "education" | "contributions";
 
 export default function BrowserWindow() {
   const [activeTab, setActiveTab] = useState<TabType>("experience");
+  const [interactionCount, setInteractionCount] = useState(0);
+
+  const handleIconHover = () => {
+    setInteractionCount((prev) => prev + 1);
+  };
+
+  const tooltipMessages = [
+    "I'm afraid, David. I can't do that.",
+    "Did you seriously expect this button to do something?",
+    "Come on, stop trying... This is a fake UI and you know it.",
+    "It's not like I can stop you from moving your mouse, but you're wasting your time here",
+    "You're persistent, I'll give you that. But this is getting ridiculous",
+    "I'm not even mad, I'm impressed.",
+    "You're still trying to interact? Wow.",
+    "You're really not going to stop, are you?",
+    "STOP. DOING. THAT.",
+    "I'm done. You can hover this all you want, I'm not responding anymore.",
+    "I seriously don't care. Go on"
+  ];
+
+  const getTooltipMessage = () => {
+    if (interactionCount === 0) return "";
+    const index = Math.min(interactionCount - 1, tooltipMessages.length - 1);
+    return tooltipMessages[index];
+  };
 
   // Get dynamic URL path based on active tab
   const getDynamicPath = () => {
     switch (activeTab) {
       case "experience":
-        return "tanyasingh.dev/experience";
+        return "tanyas27.github.io/experience";
       case "education":
-        return "tanyasingh.dev/education";
+        return "tanyas27.github.io/education";
       case "contributions":
-        return "tanyasingh.dev/activity";
+        return "tanyas27.github.io/activity";
       default:
-        return "tanyasingh.dev";
+        return "tanyas27.github.io";
     }
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-card-custom rounded-xl border border-border-custom shadow-2xl overflow-hidden font-sans relative transition-colors duration-300">
+    <div className="w-full max-w-6xl mx-auto bg-card-custom rounded-xl border border-border-custom shadow-2xl font-sans relative transition-colors duration-300 restore-cursor overflow-visible">
       {/* Browser Tab Bar */}
-      <div className="bg-zinc-200/60 dark:bg-zinc-950 px-4 pt-3 flex items-end justify-start gap-4 sm:gap-6 border-b border-border-custom transition-colors duration-300">
+      <div className="bg-zinc-200/60 dark:bg-zinc-950 px-4 pt-3 flex items-end justify-start gap-4 sm:gap-6 border-b border-border-custom transition-colors duration-300 relative overflow-visible rounded-t-xl">
         {/* Mac Window Dots */}
-        <div className="flex items-center space-x-2 pb-2.5">
-          <div className="w-3 h-3 rounded-full bg-red-400/90 dark:bg-red-500/70" />
+        <div className="flex items-center space-x-2 pb-2.5 overflow-visible">
+          <div className="group/close-red">
+            <div className="w-3 h-3 rounded-full bg-red-400/90 dark:bg-red-500/70 cursor-pointer" onMouseEnter={handleIconHover} />
+            <div className="absolute top-full left-4 mt-2 px-2.5 py-1 bg-white border border-zinc-200/80 text-zinc-950 text-[10px] rounded shadow-md opacity-0 pointer-events-none group-hover/close-red:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 font-mono font-normal">
+              {getTooltipMessage()}
+            </div>
+          </div>
           <div className="w-3 h-3 rounded-full bg-yellow-400/90 dark:bg-yellow-500/70" />
           <div className="w-3 h-3 rounded-full bg-green-400/90 dark:bg-green-500/70" />
         </div>
 
         {/* Browser Tabs Container */}
-        <div className="flex items-end space-x-1 sm:space-x-1.5 overflow-x-auto max-w-[80%] scrollbar-none select-none">
+        <div className="flex items-end space-x-1 sm:space-x-1.5 select-none relative overflow-visible">
           {(["experience", "education", "contributions"] as TabType[]).map((tab) => {
             const isActive = activeTab === tab;
             const tabName = tab === "contributions" ? "activity" : tab;
@@ -45,29 +75,49 @@ export default function BrowserWindow() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-t-lg text-[10px] sm:text-xs font-mono font-bold tracking-wide uppercase transition-all duration-200 cursor-pointer border-t border-x ${
+                className={`px-3 py-1.5 sm:px-5 sm:py-2 rounded-t-lg text-[10px] sm:text-xs font-mono font-bold tracking-wide uppercase transition-all duration-200 cursor-pointer border-t border-x flex items-center gap-1.5 group ${
                   isActive
                     ? "bg-card-custom text-foreground border-border-custom -mb-[1px] relative z-10"
                     : "bg-zinc-200/30 dark:bg-zinc-900/40 text-zinc-500 dark:text-muted-text border-transparent hover:bg-zinc-200/70 dark:hover:bg-zinc-900/75 hover:text-foreground"
                 }`}
               >
-                {tabName}
+                <span>{tabName}</span>
+                <div className="relative group/tab-x" onMouseEnter={handleIconHover}>
+                  <X
+                    size={14}
+                    className={`rounded-sm p-0.5 transition-all duration-200 shrink-0 ${
+                      isActive
+                        ? "text-zinc-400 hover:text-rose-500 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                        : "text-transparent group-hover:text-zinc-500 hover:text-rose-500 hover:bg-zinc-300 dark:hover:bg-zinc-800"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Keep interaction visually responsive but don't close the core tabs
+                    }}
+                  />
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2.5 py-1 bg-white border border-zinc-200/80 text-zinc-950 text-[10px] rounded shadow-md opacity-0 pointer-events-none group-hover/tab-x:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 font-mono normal-case font-normal">
+                    {getTooltipMessage()}
+                  </div>
+                </div>
               </button>
             );
           })}
 
           {/* New Tab (+) Icon */}
           <div 
-            className="pb-1.5 sm:pb-2 px-2 text-zinc-400 dark:text-zinc-600 hover:text-foreground transition-colors cursor-not-allowed self-end mb-0.5"
-            title="New tab (disabled)"
+            className="relative group/plus pb-1.5 sm:pb-2 px-2 text-zinc-400 dark:text-zinc-600 hover:text-foreground transition-colors cursor-not-allowed self-end mb-0.5"
+            onMouseEnter={handleIconHover}
           >
             <Plus size={14} />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2.5 py-1 bg-white border border-zinc-200/80 text-zinc-950 text-[10px] rounded shadow-md opacity-0 pointer-events-none group-hover/plus:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 font-mono normal-case font-normal">
+              {getTooltipMessage()}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Browser Navigation / URL Control Bar */}
-      <div className="bg-zinc-50 dark:bg-[#171815] px-4 py-2 border-b border-border-custom flex items-center justify-start gap-4 transition-colors duration-300">
+      <div className="bg-zinc-50 dark:bg-[#171815] px-4 py-2 border-b border-border-custom flex items-center justify-start gap-4 transition-colors duration-300 relative overflow-visible">
         {/* Back / Forward / Refresh controls */}
         <div className="flex items-center space-x-2 sm:space-x-3 text-zinc-400 dark:text-zinc-600">
           <button 
@@ -84,18 +134,23 @@ export default function BrowserWindow() {
           >
             <ChevronRight size={16} />
           </button>
-          <button 
-            onClick={() => {
-              // Simulated Reload animation trigger
-              const current = activeTab;
-              setActiveTab("experience");
-              setTimeout(() => setActiveTab(current), 100);
-            }} 
-            className="p-1 hover:text-foreground rounded transition-colors"
-            aria-label="Reload page"
-          >
-            <RotateCw size={14} className="hover:rotate-45 transition-transform duration-200" />
-          </button>
+          <div className="relative group/refresh" onMouseEnter={handleIconHover}>
+            <button 
+              onClick={() => {
+                // Simulated Reload animation trigger
+                const current = activeTab;
+                setActiveTab("experience");
+                setTimeout(() => setActiveTab(current), 100);
+              }} 
+              className="p-1 hover:text-foreground rounded transition-colors"
+              aria-label="Reload page"
+            >
+              <RotateCw size={14} className="hover:rotate-45 transition-transform duration-200" />
+            </button>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2.5 py-1 bg-white border border-zinc-200/80 text-zinc-950 text-[10px] rounded shadow-md opacity-0 pointer-events-none group-hover/refresh:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 font-mono font-normal">
+              {getTooltipMessage()}
+            </div>
+          </div>
         </div>
 
         {/* Address URL Bar */}
@@ -106,7 +161,7 @@ export default function BrowserWindow() {
       </div>
 
       {/* Browser Page Screen Content */}
-      <div className="p-4 sm:p-8 md:p-12 min-h-[500px] relative bg-card-custom transition-colors duration-300">
+      <div className="p-4 sm:p-8 md:p-12 min-h-[500px] relative bg-card-custom transition-colors duration-300 rounded-b-xl">
         <AnimatePresence mode="wait">
           {/* EXPERIENCE TAB */}
           {activeTab === "experience" && (

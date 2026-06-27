@@ -256,12 +256,14 @@ export default function CustomCursor() {
       {/* Global canvas overlays for trailing sparkles */}
       <canvas
         ref={canvasRef}
+        id="custom-cursor-canvas"
         className="fixed inset-0 w-full h-full pointer-events-none z-[99999]"
       />
 
       {/* Rotating SVG burning-asteroid cursor (Long-Tailed Molten Fireball) */}
       <div
         ref={dotDomRef}
+        id="custom-cursor-dot"
         className="fixed top-0 left-0 w-16 h-[48px] -ml-8 -mt-[24px] pointer-events-none z-[99999] transition-transform duration-75 ease-out"
         style={{
           transform: "translate3d(-100px, -100px, 0) rotate(0deg)",

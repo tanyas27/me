@@ -99,6 +99,35 @@ body {
   .custom-cursor-active * {
     cursor: none !important;
   }
+
+  /* Restore cursor utilities */
+  .custom-cursor-active .restore-cursor,
+  .custom-cursor-active .restore-cursor * {
+    cursor: auto !important;
+  }
+  
+  .custom-cursor-active .restore-cursor a,
+  .custom-cursor-active .restore-cursor button,
+  .custom-cursor-active .restore-cursor [role="button"],
+  .custom-cursor-active .restore-cursor input[type="button"],
+  .custom-cursor-active .restore-cursor input[type="submit"],
+  .custom-cursor-active .restore-cursor select,
+  .custom-cursor-active .restore-cursor a *,
+  .custom-cursor-active .restore-cursor button * {
+    cursor: pointer !important;
+  }
+  
+  .custom-cursor-active .restore-cursor input[type="text"],
+  .custom-cursor-active .restore-cursor textarea,
+  .custom-cursor-active .restore-cursor input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]) {
+    cursor: text !important;
+  }
+
+  /* Hide custom cursor canvas and dot when hovering over restore-cursor element */
+  html:has(.restore-cursor:hover) #custom-cursor-canvas,
+  html:has(.restore-cursor:hover) #custom-cursor-dot {
+    display: none !important;
+  }
 }
 
 /* Meteor cursor — animated flame layers */
