@@ -18,7 +18,8 @@ interface TrailParticle {
   color: string;
 }
 
-const MOON_TEXTURE_PATH = "/textures/moon.jpg";
+const basePath = process.env.NODE_ENV === 'production' ? '/me' : '';
+const MOON_TEXTURE_PATH = `${basePath}/textures/moon.jpg`;
 
 function configureMoonTexture(texture: THREE.Texture) {
   texture.wrapS = THREE.RepeatWrapping;

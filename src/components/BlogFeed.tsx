@@ -59,7 +59,8 @@ export default function BlogFeed() {
   useEffect(() => {
     async function fetchBlogs() {
       try {
-        const res = await fetch("/api/blogs");
+        const basePath = process.env.NODE_ENV === 'production' ? '/me' : '';
+        const res = await fetch(`${basePath}/api/blogs`);
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         if (data.posts && Array.isArray(data.posts) && data.posts.length > 0) {
