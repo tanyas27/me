@@ -1,12 +1,12 @@
 "use client";
 
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type PoseType = "swing" | "walk1" | "walk2" | "sit";
 
 // Large, highly colorful chibi adventurer pixel character
-function PixelCharacter({ pose }: { pose: PoseType }) {
+const PixelCharacter = React.memo(function PixelCharacter({ pose }: { pose: PoseType }) {
   // Vibrant, distinct colors for clear body and clothing definition
   const capColor = "fill-red-500";        // Red Cap
   const hairColor = "fill-[#6B4226]";      // Brown Hair
@@ -161,7 +161,7 @@ function PixelCharacter({ pose }: { pose: PoseType }) {
       ))}
     </svg>
   );
-}
+});
 
 export default function TraceLine() {
   const { scrollYProgress } = useScroll();

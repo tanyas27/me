@@ -13,7 +13,11 @@ function seedRandom(seed: number) {
   };
 }
 
-export default function GithubGraph() {
+interface GithubGraphProps {
+  minimal?: boolean;
+}
+
+export default function GithubGraph({ minimal = false }: GithubGraphProps) {
   const [hoveredCell, setHoveredCell] = useState<{
     count: number;
     date: string;
@@ -86,7 +90,7 @@ export default function GithubGraph() {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 md:p-8 rounded-xl bg-card-custom border border-border-custom shadow-md font-sans">
+    <div className={minimal ? "w-full font-sans" : "w-full max-w-4xl mx-auto p-6 md:p-8 rounded-xl bg-card-custom border border-border-custom shadow-md font-sans"}>
       {/* Title Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>

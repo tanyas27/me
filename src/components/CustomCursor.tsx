@@ -210,7 +210,7 @@ export default function CustomCursor() {
 
       // Update Canvas Particles
       const canvas = canvasRef.current;
-      if (canvas) {
+      if (canvas && particlesRef.current.length > 0) {
         const ctx = canvas.getContext("2d");
         if (ctx) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -223,6 +223,11 @@ export default function CustomCursor() {
 
           // Prune dead particles
           particlesRef.current = particlesRef.current.filter((p) => p.life > 0);
+
+          // Clear one final time if list became empty
+          if (particlesRef.current.length === 0) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
         }
       }
 
@@ -280,21 +285,7 @@ export default function CustomCursor() {
                 numOctaves="4"
                 seed="2"
                 result="noise"
-              >
-                <animate
-                  attributeName="baseFrequency"
-                  values="0.08 0.15;0.12 0.22;0.06 0.12;0.1 0.18;0.08 0.15"
-                  dur="0.45s"
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="seed"
-                  from="1"
-                  to="30"
-                  dur="0.7s"
-                  repeatCount="indefinite"
-                />
-              </feTurbulence>
+              />
               <feDisplacementMap
                 in="SourceGraphic"
                 in2="noise"

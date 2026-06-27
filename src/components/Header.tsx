@@ -64,7 +64,6 @@ export default function Header() {
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
     { label: "Blogs", href: "#blogs" },
-    { label: "GitHub", href: "#github" },
     { label: "Contact", href: "#contact" },
   ];
 

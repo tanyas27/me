@@ -5,11 +5,10 @@ import dynamic from "next/dynamic";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import TraceLine from "../components/TraceLine";
-import TerminalWindow from "../components/TerminalWindow";
+import BrowserWindow from "../components/BrowserWindow";
 import SkillsSection from "../components/SkillsSection";
 import ProjectShowcase from "../components/ProjectShowcase";
 import BlogFeed from "../components/BlogFeed";
-import GithubGraph from "../components/GithubGraph";
 import ContactSection from "../components/ContactSection";
 import { Download, FileText, ArrowRight, ExternalLink } from "lucide-react";
 
@@ -139,8 +138,8 @@ export default function Home() {
               </h2>
             </div>
 
-            {/* Terminal Tab Container */}
-            <TerminalWindow />
+            {/* Browser Tab Container */}
+            <BrowserWindow />
           </div>
         </section>
 
@@ -232,29 +231,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 5: GITHUB ACTIVITY MAP */}
-        <section
-          id="github"
-          className="heavy-section py-24 border-t border-border-custom relative overflow-visible"
-          style={{ contentVisibility: "auto", containIntrinsicSize: "auto none auto 500px" }}
-        >
-          <div className="max-w-7xl mx-auto">
-            {/* Editorial Section Header */}
-            <div className="mb-16">
-              <span className="font-mono text-xs font-semibold text-accent-custom tracking-widest uppercase">
-                05. Sync Logs
-              </span>
-              <h2 className="editorial-title text-3xl md:text-4xl text-foreground mt-2">
-                Contribution Frequency
-              </h2>
-            </div>
-
-            {/* Github custom contribution component */}
-            <GithubGraph />
-          </div>
-        </section>
-
-        {/* SECTION 6: CONTACT */}
+        {/* SECTION 5: CONTACT */}
         <section
           id="contact"
           className="heavy-section py-24 border-t border-border-custom relative overflow-visible"
@@ -264,7 +241,7 @@ export default function Home() {
             {/* Editorial Section Header */}
             <div className="mb-16">
               <span className="font-mono text-xs font-semibold text-accent-custom tracking-widest uppercase">
-                06. Connection Channels
+                05. Connection Channels
               </span>
               <h2 className="editorial-title text-3xl md:text-4xl text-foreground mt-2">
                 Get In Touch
