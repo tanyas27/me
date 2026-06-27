@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #FAF7F2; /* Warm Linen Stone Cream */
+  --foreground: #1C1C19; /* Editorial Charcoal Black */
+  
+  --card-bg: #ffffff;
+  --border-color: rgba(28, 28, 25, 0.08);
+  --accent-color: #A77B4A; /* Muted Bronze Gold */
+  --accent-light: #F2ECE0; /* Very light warm gold */
+  --accent-dark: #7A5930;
+  --muted-text: #6E6D68; /* Warm granite gray */
+}
+
+:root.dark {
+  --background: #121311; /* Deep Ebony Black */
+  --foreground: #ECE7DC; /* Linen Alabaster */
+  
+  --card-bg: #1A1B18;
+  --border-color: rgba(236, 231, 220, 0.08);
+  --accent-color: #D5A76E; /* Warm Honey Gold */
+  --accent-light: #28251E; /* Deep gold tint */
+  --accent-dark: #A67D4B;
+  --muted-text: #96958E; /* Warm dust gray */
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card-custom: var(--card-bg);
+  --color-border-custom: var(--border-color);
+  --color-accent-custom: var(--accent-color);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-muted-text: var(--muted-text);
+  
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-cormorant), serif;
+  --font-mono: var(--font-jetbrains), monospace;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Performance optimizations: content-visibility for heavy sections */
+.heavy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 700px;
+}
+
+/* Glassmorphism utility */
+.glassmorphism {
+  background: rgba(250, 249, 246, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glassmorphism {
+  background: rgba(13, 14, 16, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Custom utility for typography layout */
+.editorial-title {
+  font-family: var(--font-cormorant), serif;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+/* Custom cursor-hiding utilities */
+@media (hover: hover) and (pointer: fine) {
+  .custom-cursor-active,
+  .custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+/* Meteor cursor — animated flame layers */
+@keyframes meteor-flame-flicker-outer {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: scaleX(1) scaleY(1);
+  }
+  20% {
+    opacity: 1;
+    transform: scaleX(1.12) scaleY(0.94);
+  }
+  45% {
+    opacity: 0.7;
+    transform: scaleX(0.9) scaleY(1.08);
+  }
+  70% {
+    opacity: 0.95;
+    transform: scaleX(1.06) scaleY(0.97);
+  }
+}
+
+@keyframes meteor-flame-flicker-mid {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scaleX(1) scaleY(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scaleX(1.08) scaleY(0.96);
+  }
+  55% {
+    opacity: 0.65;
+    transform: scaleX(0.93) scaleY(1.06);
+  }
+  80% {
+    opacity: 0.9;
+    transform: scaleX(1.04) scaleY(0.98);
+  }
+}
+
+@keyframes meteor-flame-flicker-core {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scaleX(1) scaleY(1);
+  }
+  25% {
+    opacity: 1;
+    transform: scaleX(1.05) scaleY(0.95);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scaleX(0.95) scaleY(1.04);
+  }
+  75% {
+    opacity: 0.95;
+    transform: scaleX(1.03) scaleY(0.99);
+  }
+}
+
+.meteor-flames {
+  transform-box: fill-box;
+  transform-origin: 88% 50%;
+}
+
+.meteor-flame-outer {
+  animation: meteor-flame-flicker-outer 0.38s ease-in-out infinite;
+}
+
+.meteor-flame-mid {
+  animation: meteor-flame-flicker-mid 0.32s ease-in-out infinite;
+  animation-delay: -0.12s;
+}
+
+.meteor-flame-core {
+  animation: meteor-flame-flicker-core 0.28s ease-in-out infinite;
+  animation-delay: -0.08s;
+}
+
