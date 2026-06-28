@@ -6,10 +6,10 @@ import { ChevronLeft, ChevronRight, RotateCw, Lock, Plus, X } from "lucide-react
 import { portfolioData } from "../data/portfolio";
 import GithubGraph from "./GithubGraph";
 
-type TabType = "experience" | "education" | "contributions";
+type TabType = "timeline" | "contributions";
 
 export default function BrowserWindow() {
-  const [activeTab, setActiveTab] = useState<TabType>("experience");
+  const [activeTab, setActiveTab] = useState<TabType>("timeline");
   const [interactionCount, setInteractionCount] = useState(0);
 
   const handleIconHover = () => {
@@ -36,13 +36,10 @@ export default function BrowserWindow() {
     return tooltipMessages[index];
   };
 
-  // Get dynamic URL path based on active tab
   const getDynamicPath = () => {
     switch (activeTab) {
-      case "experience":
-        return "tanyas27.github.io/experience";
-      case "education":
-        return "tanyas27.github.io/education";
+      case "timeline":
+        return "tanyas27.github.io/timeline";
       case "contributions":
         return "tanyas27.github.io/activity";
       default:
@@ -68,7 +65,7 @@ export default function BrowserWindow() {
 
         {/* Browser Tabs Container */}
         <div className="flex items-end space-x-1 sm:space-x-1.5 select-none relative overflow-visible flex-1 sm:flex-initial">
-          {(["experience", "education", "contributions"] as TabType[]).map((tab) => {
+          {(["timeline", "contributions"] as TabType[]).map((tab) => {
             const isActive = activeTab === tab;
             const tabName = tab === "contributions" ? "activity" : tab;
             return (
@@ -139,7 +136,8 @@ export default function BrowserWindow() {
               onClick={() => {
                 // Simulated Reload animation trigger
                 const current = activeTab;
-                setActiveTab("experience");
+                // Temporarily toggle active tab to trigger reload effect animation
+                setActiveTab(current === "timeline" ? "contributions" : "timeline");
                 setTimeout(() => setActiveTab(current), 100);
               }} 
               className="p-1 hover:text-foreground rounded transition-colors"
@@ -163,98 +161,88 @@ export default function BrowserWindow() {
       {/* Browser Page Screen Content */}
       <div className="p-5 sm:p-8 md:p-12 min-h-[400px] sm:min-h-[500px] relative bg-card-custom transition-colors duration-300 rounded-b-xl">
         <AnimatePresence mode="wait">
-          {/* EXPERIENCE TAB */}
-          {activeTab === "experience" && (
+          {/* TIMELINE TAB */}
+          {activeTab === "timeline" && (
             <motion.div
-              key="experience"
+              key="timeline"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="space-y-16"
+              className="relative space-y-12"
             >
-              {portfolioData.experience.map((job) => (
-                <div key={job.id} className="group relative border-l-2 border-zinc-300 dark:border-zinc-800 pl-4 ml-1 sm:pl-8 sm:ml-4 transition-colors duration-300">
-                  {/* Timeline dot */}
-                  <div className="absolute -left-[7px] top-2.5 w-3.5 h-3.5 rounded-full bg-zinc-400 dark:bg-zinc-700 group-hover:bg-accent-dark dark:group-hover:bg-accent-custom transition-all duration-300 border-4 border-card-custom" />
-                  
-                  {/* Header containing title, company, dates */}
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
-                    <div>
-                      <h3 className="text-base sm:text-xl md:text-2xl font-serif font-bold text-foreground tracking-tight">
-                        {job.role}
+              {/* Vertical line through timeline items */}
+              <div className="absolute left-[15px] md:left-[25%] top-4 bottom-4 w-[2px] bg-zinc-200 dark:bg-zinc-800/85 transition-colors" />
+
+              {portfolioData.milestones.map((milestone) => {
+                // Determine node dot styles based on type
+                let dotClass = "";
+                if (milestone.type === "accreditation") {
+                  dotClass = "bg-zinc-950 dark:bg-zinc-100 border-zinc-950 dark:border-zinc-100";
+                } else if (milestone.type === "experience") {
+                  dotClass = "bg-accent-dark dark:bg-accent-custom border-accent-dark dark:border-accent-custom";
+                } else if (milestone.type === "recognition") {
+                  dotClass = "bg-card-custom border-2 border-accent-dark dark:border-accent-custom";
+                } else {
+                  // education
+                  dotClass = "bg-accent-dark dark:bg-accent-custom border-accent-dark dark:border-accent-custom";
+                }
+
+                // Determine badge styles
+                let badgeClass = "";
+                if (milestone.type === "accreditation") {
+                  badgeClass = "bg-zinc-950 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-950 font-bold";
+                } else if (milestone.type === "experience") {
+                  badgeClass = "bg-accent-light text-accent-dark dark:text-accent-custom font-bold border border-accent-custom/25";
+                } else if (milestone.type === "recognition") {
+                  badgeClass = "bg-accent-light text-accent-dark dark:text-accent-custom font-bold border border-accent-custom/25";
+                } else {
+                  // education
+                  badgeClass = "bg-zinc-100 text-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-300 font-bold border border-border-custom";
+                }
+
+                return (
+                  <div key={milestone.id} className="relative pl-9 md:pl-0 md:grid md:grid-cols-12 md:gap-8 group">
+                    {/* Left Column: Date & Category Badge */}
+                    <div className="md:col-span-3 md:text-right pr-0 md:pr-8 flex flex-col items-start md:items-end justify-start gap-1 pb-2 md:pb-0">
+                      <span className="font-serif font-bold text-base md:text-lg text-foreground tracking-tight whitespace-nowrap">
+                        {milestone.period}
+                      </span>
+                      <span className={`inline-block text-[9px] font-mono tracking-widest uppercase px-2 py-0.5 rounded ${badgeClass}`}>
+                        {milestone.type}
+                      </span>
+                    </div>
+
+                    {/* Timeline Node Dot */}
+                    <div className={`absolute left-[10px] md:left-[25%] top-1.5 md:top-2 w-3 h-3 rounded-full md:-translate-x-1/2 border-4 border-card-custom ${dotClass} z-10 shadow-xs transition-transform duration-300 group-hover:scale-125`} />
+
+                    {/* Right Column: Title, Issuer, and Description */}
+                    <div className="md:col-span-9 pl-0 md:pl-8 flex flex-col justify-start">
+                      <h3 className="text-base sm:text-lg md:text-xl font-serif font-bold text-foreground leading-tight tracking-tight hover:text-accent-dark dark:hover:text-accent-custom transition-colors">
+                        {milestone.role}
                       </h3>
-                      <p className="text-xs sm:text-sm md:text-base font-semibold text-accent-dark dark:text-accent-custom font-mono mt-1">
-                        {job.company}
+                      <span className="text-[10px] font-mono font-bold tracking-wider text-accent-dark dark:text-accent-custom uppercase mt-1">
+                        {milestone.company}
+                      </span>
+                      <p className="text-[13px] md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-sans font-medium mt-3">
+                        {milestone.description}
                       </p>
-                    </div>
-                    <div className="text-left md:text-right">
-                      <span className="inline-block text-xs md:text-sm font-mono font-bold text-foreground">
-                        {job.period}
-                      </span>
-                      <span className="block text-xs font-mono text-muted-text italic mt-0.5">
-                        {job.duration}
-                      </span>
+                      {milestone.tags && (
+                        <div className="flex flex-wrap gap-1.5 mt-3">
+                          {milestone.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[9px] font-mono px-2 py-0.5 rounded border border-border-custom bg-zinc-50/50 dark:bg-zinc-900/30 text-muted-text"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
-
-                  {/* Role Brief Description */}
-                  <p className="mt-4 text-[13px] md:text-[14px] text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans font-medium">
-                    {job.description}
-                  </p>
-
-                  {/* Skills tags list */}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {job.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[11px] font-mono font-medium px-2.5 py-1 rounded bg-zinc-50 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-border-custom hover:text-accent-dark hover:border-accent-dark dark:hover:text-accent-custom dark:hover:border-accent-custom transition-all duration-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Achievements bullet list */}
-                  <ul className="mt-6 space-y-4">
-                    {job.bullets.map((bullet, idx) => (
-                      <li key={idx} className="text-[13px] md:text-[14px] text-zinc-800 dark:text-zinc-200 flex items-start gap-3 leading-relaxed">
-                        <span className="text-accent-dark dark:text-accent-custom mt-1.5 font-mono text-[10px] select-none">&gt;</span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </motion.div>
-          )}
-
-          {/* EDUCATION TAB */}
-          {activeTab === "education" && (
-            <motion.div
-              key="education"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-10"
-            >
-              {portfolioData.education.map((edu, idx) => (
-                <div key={idx} className="group relative border-l-2 border-zinc-300 dark:border-zinc-800 pl-4 ml-1 sm:pl-8 sm:ml-4 transition-colors duration-300">
-                  {/* Timeline dot */}
-                  <div className="absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full bg-zinc-400 dark:bg-zinc-700 group-hover:bg-accent-dark dark:group-hover:bg-accent-custom transition-all duration-300 border-4 border-card-custom" />
-                  
-                  <span className="text-xs md:text-sm font-mono font-bold text-accent-dark dark:text-accent-custom">
-                    {edu.period}
-                  </span>
-                  <h3 className="text-base sm:text-lg md:text-xl font-serif font-bold text-foreground tracking-tight mt-1">
-                    {edu.degree}
-                  </h3>
-                  <p className="text-xs sm:text-sm md:text-base text-zinc-700 dark:text-zinc-300 font-serif italic mt-1.5">
-                    {edu.institution}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </motion.div>
           )}
 

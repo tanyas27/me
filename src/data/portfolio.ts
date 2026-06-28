@@ -1,12 +1,12 @@
-export interface Job {
+export interface Milestone {
   id: string;
+  type: "experience" | "education" | "accreditation" | "recognition";
   role: string;
   company: string;
   period: string;
-  duration: string;
   description: string;
-  tags: string[];
-  bullets: string[];
+  tags?: string[];
+  duration?: string;
 }
 
 export interface Project {
@@ -16,17 +16,12 @@ export interface Project {
   technologies: string[];
   metrics?: string;
   link?: string;
+  highlights?: string[];
 }
 
 export interface SkillCategory {
   category: string;
   skills: string[];
-}
-
-export interface Education {
-  degree: string;
-  institution: string;
-  period: string;
 }
 
 export interface PortfolioData {
@@ -35,8 +30,7 @@ export interface PortfolioData {
   location: string;
   summary: string;
   skills: SkillCategory[];
-  experience: Job[];
-  education: Education[];
+  milestones: Milestone[];
   projects: Project[];
 }
 
@@ -63,7 +57,6 @@ export const portfolioData: PortfolioData = {
         "Micro-Frontends",
         "Server-Side Rendering (SSR)",
         "Single Page Applications (SPA)",
-        "Stencil.js (Web Components)"
       ]
     },
     {
@@ -160,72 +153,40 @@ export const portfolioData: PortfolioData = {
       ]
     }
   ],
-  experience: [
+  milestones: [
+    {
+      id: "cca",
+      type: "accreditation",
+      role: "Claude Certified Architect – Foundations (CCAF) - Early Adopter",
+      company: "ANTHROPIC",
+      period: "2026",
+      description: "Formally accredited for engineering and designing agentic systems using LLM workflows, Claude Code integrations, and custom Model Context Protocol (MCP) servers."
+    },
     {
       id: "epam-lead",
-      role: "Lead Software Engineer",
-      company: "EPAM Systems",
-      period: "2024 - Present",
-      duration: "1 year (Lead), 4 years total at EPAM",
-      description: "Embedded as forward deployed architect and delivery manager for enterprise clients, driving high-velocity engineering, monorepo architectures, and AI-native development workflows.",
-      tags: ["Next.js", "TypeScript", "Turborepo", "Storybook", "BigCommerce", "Azure Service Bus", "Claude Code"],
-      bullets: [
-        "Architected a greenfield Next.js 15 headless e-commerce storefront for Princess Auto utilizing MACH principles, managing 14-18 engineers.",
-        "Standardized a shared Turborepo monorepo and UI design system (50+ Storybook components), reducing code duplication by 35% across 5 frontends.",
-        "Engineered integrations with BigCommerce and Constructor.io, utilizing Azure Service Bus for critical pipelines and cutting data latency by 65%.",
-        "Pioneered AI-native developer workflows using custom agents and Claude Code, increasing delivery velocity by 4x.",
-        "Headed EPAM's promotion assessment committee, evaluating 50+ senior engineers annually and designing global competency frameworks."
-      ]
-    },
-    {
-      id: "epam-senior",
-      role: "Accessibility & Frontend Engineering Lead",
-      company: "EPAM Systems (Atlassian Project)",
-      period: "2022 - 2024",
-      duration: "2 years",
-      description: "Accessibility SME embedded within the Atlassian Jira team (serving a 500+ engineer organization), spearheading accessibility remediation and testing standards.",
-      tags: ["React", "Accessibility", "Axe DevTools", "ARIA", "CI/CD", "GitHub Copilot"],
-      bullets: [
-        "Spearheaded WCAG 2.1 AA compliance across Jira, remediating over 2,000 React components and resolving 70% of accessibility violations for millions of users.",
-        "Pioneered LLM-assisted accessibility remediation with GitHub Copilot, reducing average ARIA fix times from 4 hours to 30 minutes.",
-        "Integrated Axe testing into the CI/CD pipeline, catching 90% of regressions before production and increasing test coverage from 65% to 82%.",
-        "Led a global frontend mentorship program for 15+ engineers, achieving an 80% promotion rate."
-      ]
-    },
-    {
-      id: "epam-fullstack",
-      role: "Senior Full-Stack Engineer",
-      company: "EPAM Systems (S&P Global & Medibank)",
-      period: "June 2021 - 2022",
-      duration: "1 year",
-      description: "Built corporate systems, progressive web applications, and provider onboarding pipelines.",
-      tags: ["React", "Node.js", "Firebase", "Tableau", "PWA", "Service Workers"],
-      bullets: [
-        "Developed 40+ production-grade React components for the S&P Global corporate design system with 95% test coverage.",
-        "Built React-based Tableau live-data integrations and created a standalone offline-first Progressive Web App (PWA) for CapitalIQ Pro using service workers, increasing mobile engagement by 28%.",
-        "Developed a healthcare provider onboarding portal for Medibank using React, Node.js, and Firebase, implementing FileReader CSV uploads and reducing registration errors by 60%."
-      ]
+      type: "experience",
+      role: "Lead Software Engineer & Solutions Architect",
+      company: "EPAM SYSTEMS",
+      period: "Dec 2020 - Present",
+      description: "Architecting event-driven MACH platforms for global clients from greenfield Next.js storefronts to serverless edge delivery across 170+ countries — while leading cross-functional teams and pioneering AI developer tooling.",
+      tags: ["Next.js 15", "TypeScript", "Turborepo", "Storybook", "BigCommerce", "Azure Service Bus", "Claude Code"]
     },
     {
       id: "tcs-system",
+      type: "experience",
       role: "System Engineer",
-      company: "Tata Consultancy Services",
+      company: "TATA CONSULTANCY SERVICES",
       period: "April 2018 - June 2021",
-      duration: "3 years",
-      description: "Designed and optimized full-stack features for a high-traffic insurance policy portal serving 10,000+ daily active users.",
-      tags: ["React", "JavaScript", "Webpack", "Redux", "Lazy Loading", "Performance"],
-      bullets: [
-        "Delivered 15+ full-stack features and optimized React frontend efficiency by 34%.",
-        "Applied Webpack bundle splitting, React.memo, and lazy loading, reducing page load times from 4.2s to 2.8s.",
-        "Improved Largest Contentful Paint (LCP) by 45% for the high-traffic insurance platform."
-      ]
-    }
-  ],
-  education: [
+      description: "Designed and optimized full-stack features for a high-traffic insurance policy portal serving 10,000+ daily active users, improving loading performance by 34% and LCP by 45%.",
+      tags: ["React", "Redux", "Webpack", "Performance Optimization"]
+    },
     {
-      degree: "Bachelor of Technology (B.Tech) in Computer Science & Engineering",
-      institution: "Dr. A.P.J. Abdul Kalam Technical University, India",
-      period: "2014 - 2018"
+      id: "education-btech",
+      type: "education",
+      role: "B.Tech in Computer Science & Engineering",
+      company: "DR. A.P.J. ABDUL KALAM TECHNICAL UNIVERSITY",
+      period: "2013 - 2017",
+      description: "Completed undergraduate studies specializing in algorithms, software engineering principles, and distributed systems."
     }
   ],
   projects: [
@@ -235,15 +196,49 @@ export const portfolioData: PortfolioData = {
       description: "A greenfield, next-generation headless e-commerce storefront architected on MACH principles. Built with Next.js 15, Turborepo, BigCommerce, Constructor.io, and Azure Service Bus.",
       technologies: ["Next.js 15", "Turborepo", "BigCommerce", "Azure Service Bus", "Storybook", "TypeScript"],
       metrics: "65% data-fetch latency reduction, 35% less code duplication",
-      link: "#"
+      link: "#",
+      highlights: [
+        "Architected Next.js 15 storefront for Princess Auto utilizing MACH principles, managing a team of 14-18 engineers.",
+        "Standardized a shared Turborepo monorepo and UI design system (50+ Storybook components).",
+        "Engineered integrations with BigCommerce and Constructor.io, utilizing Azure Service Bus for critical pipelines."
+      ]
+    },
+    {
+      id: "jira-accessibility",
+      title: "Jira Accessibility Compliance",
+      description: "Accessibility SME remediation for the Atlassian Jira team, driving WCAG 2.1 AA compliance across millions of daily active users.",
+      technologies: ["React", "Accessibility", "Axe DevTools", "ARIA", "CI/CD", "GitHub Copilot"],
+      metrics: "70% accessibility violations resolved, Axe automated coverage up to 82%",
+      link: "#",
+      highlights: [
+        "Remediated over 2,000 React components and resolved 70% of accessibility violations for Jira.",
+        "Pioneered LLM-assisted accessibility remediation with GitHub Copilot, reducing average ARIA fix times from 4 hours to 30 minutes.",
+        "Integrated Axe testing into the CI/CD pipeline, catching 90% of regressions before production."
+      ]
     },
     {
       id: "capital-iq-pwa",
       title: "CapitalIQ Pro Offline PWA",
       description: "An offline-first Progressive Web App (PWA) extension for S&P Global CapitalIQ Pro. Integrates service workers, offline sync, and real-time Tableau Embedded analytics widgets.",
       technologies: ["React", "Service Workers", "Tableau Analytics", "PWA", "Tailwind CSS"],
-      metrics: "28% increase in mobile user engagement",
-      link: "#"
+      metrics: "28% increase in mobile user engagement, 95% test coverage",
+      link: "#",
+      highlights: [
+        "Developed 40+ production-grade React components for the S&P Global corporate design system.",
+        "Built React-based Tableau live-data integrations and created a standalone offline-first PWA using service workers."
+      ]
+    },
+    {
+      id: "medibank-portal",
+      title: "Medibank Onboarding Portal",
+      description: "A secure, streamlined healthcare provider onboarding portal featuring dynamic validation and bulk CSV uploading.",
+      technologies: ["React", "Node.js", "Firebase", "CSV Processing"],
+      metrics: "60% registration error reduction",
+      link: "#",
+      highlights: [
+        "Developed a healthcare provider onboarding portal for Medibank using React, Node.js, and Firebase.",
+        "Implemented FileReader CSV uploads and dynamic validation rules."
+      ]
     },
     {
       id: "cov-support",
@@ -251,22 +246,6 @@ export const portfolioData: PortfolioData = {
       description: "A real-time social impact web application connecting patients with local medical resources, featuring real-time geolocation searches and sync.",
       technologies: ["React", "Firebase Realtime DB", "Geolocation API", "Node.js"],
       metrics: "Real-time coordination for thousands of users",
-      link: "#"
-    },
-    {
-      id: "covid-tracker",
-      title: "COVID-19 Analytics Dashboard",
-      description: "Interactive real-time visual tracking platform analyzing spread vectors, utilizing HighCharts and deployed on AWS S3/CloudFront.",
-      technologies: ["React", "HighCharts", "AWS S3", "CloudFront", "Node.js", "Firebase"],
-      metrics: "Serverless delivery with zero maintenance overhead",
-      link: "#"
-    },
-    {
-      id: "spacex-tracker",
-      title: "SpaceX Launch Timeline Tracker",
-      description: "Highly interactive astronomical dashboard consuming SpaceX APIs to showcase timelines, launches, and custom data visualisations.",
-      technologies: ["React", "SpaceX API", "CSS Grid", "Framer Motion"],
-      metrics: "Fluid micro-interactions and historical timeline analytics",
       link: "#"
     }
   ]

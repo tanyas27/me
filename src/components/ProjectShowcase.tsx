@@ -38,6 +38,18 @@ export default function ProjectShowcase() {
             <p className="mt-4 text-xs text-muted-text leading-relaxed font-sans">
               {project.description}
             </p>
+
+            {/* Highlights bullet list */}
+            {project.highlights && (
+              <ul className="mt-4 space-y-2">
+                {project.highlights.map((bullet, idx) => (
+                  <li key={idx} className="text-[11px] text-zinc-700 dark:text-zinc-300 flex items-start gap-2 leading-relaxed">
+                    <span className="text-accent-custom mt-1 font-mono text-[8px] select-none">&gt;</span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Bottom Section */}
