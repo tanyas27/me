@@ -67,11 +67,13 @@ export default function Home() {
               {/* Dynamic CV link button with trace loops */}
               <div className="relative inline-flex self-start group">
                 <a
-                  href="#contact"
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-3 px-6 py-3 rounded-full border border-accent-custom bg-accent-light/50 dark:bg-accent-light/5 text-accent-custom hover:bg-accent-custom hover:text-white transition-all duration-300 text-xs font-mono tracking-wide"
                 >
-                  <FileText size={14} />
-                  <span>Lets Connect</span>
+                  <Download size={14} />
+                  <span>Download CV</span>
                   <ArrowRight size={12} className="transform group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 {/* Decorative architectural circle connectors */}
@@ -99,24 +101,7 @@ export default function Home() {
               {/* Stats Bar */}
               <StatsBar />
 
-              {/* Action buttons */}
-              <div className="flex flex-wrap gap-4 pt-4">
-                <a
-                  href="#experience"
-                  className="px-6 py-3.5 rounded-full bg-foreground text-background font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors text-xs tracking-wide"
-                >
-                  Explore Chronicles
-                </a>
-                <a
-                  href="/resume.pdf" // Placeholder path for resume
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3.5 rounded-full border border-border-custom hover:bg-border-custom transition-all text-xs font-medium tracking-wide flex items-center gap-2"
-                >
-                  <Download size={14} />
-                  Download CV
-                </a>
-              </div>
+
             </div>
 
             {/* Right Column: 3D interactive scene sphere */}
