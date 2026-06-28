@@ -133,10 +133,10 @@ function AstroMechanics({ isActive, isDarkMode, isMobile, moonTexture }: { isAct
     if (moonGroupRef.current) {
       const targetGroupX = THREE.MathUtils.clamp(mouse.current.x * 0.45 + repulsion.current.x, -2.2, 2.2);
       const targetGroupY = THREE.MathUtils.clamp(mouse.current.y * 0.35 + repulsion.current.y, -1.6, 1.6);
-      
+
       moonGroupRef.current.position.x += (targetGroupX - moonGroupRef.current.position.x) * 0.1;
       moonGroupRef.current.position.y += (targetGroupY - moonGroupRef.current.position.y) * 0.1;
-      
+
       // Gentle tilt based on mouse position
       moonGroupRef.current.rotation.y = time * 0.01 + mouse.current.x * 0.25;
       moonGroupRef.current.rotation.x = mouse.current.y * 0.15;
@@ -221,15 +221,15 @@ function AstroMechanics({ isActive, isDarkMode, isMobile, moonTexture }: { isAct
 
   return (
     <group>
+      {/* Upper-left directional light — positioned to keep shadow under 10% and static relative to rotating moon */}
+      <directionalLight
+        position={[-3, 2.2, 8]}
+        intensity={isDarkMode ? 4.8 : 5.2}
+        color="#FFFFFF"
+      />
+
       {/* 3D Moon Group with Lights */}
       <group ref={moonGroupRef}>
-        {/* Upper-left directional light — matches reference terminator */}
-        <directionalLight
-          position={[-8, 5, 6]}
-          intensity={isDarkMode ? 4.8 : 5.2}
-          color="#FFFFFF"
-        />
-
         {/* 3D Moon mesh */}
         <mesh ref={moonRef}>
           <sphereGeometry args={isMobile ? [1.8, 32, 32] : [1.8, 96, 96]} />
@@ -354,7 +354,7 @@ export default function CelestialSphere() {
   if (loadError) {
     // Beautiful glowing CSS fallback orb instead of blank/broken canvas
     return (
-      <div 
+      <div
         ref={containerRef}
         className="w-full h-full min-h-[320px] md:min-h-[450px] lg:min-h-[550px] flex items-center justify-center relative overflow-hidden"
       >
@@ -365,7 +365,7 @@ export default function CelestialSphere() {
 
   if (!mounted || !moonTexture) {
     return (
-      <div 
+      <div
         ref={containerRef}
         className="w-full h-full min-h-[320px] md:min-h-[450px] lg:min-h-[550px] flex items-center justify-center bg-transparent"
       />

@@ -55,7 +55,7 @@ export default function BrowserWindow() {
       {/* Browser Tab Bar */}
       <div className="bg-zinc-200/60 dark:bg-zinc-950 px-4 pt-3 flex items-end justify-start gap-4 sm:gap-6 border-b border-border-custom transition-colors duration-300 relative overflow-visible rounded-t-xl">
         {/* Mac Window Dots */}
-        <div className="flex items-center space-x-2 pb-2.5 overflow-visible">
+        <div className="hidden sm:flex items-center space-x-2 pb-2.5 overflow-visible">
           <div className="group/close-red">
             <div className="w-3 h-3 rounded-full bg-red-400/90 dark:bg-red-500/70 cursor-pointer" onMouseEnter={handleIconHover} />
             <div className="absolute top-full left-4 mt-2 px-2.5 py-1 bg-white border border-zinc-200/80 text-zinc-950 text-[10px] rounded shadow-md opacity-0 pointer-events-none group-hover/close-red:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50 font-mono font-normal">
@@ -67,7 +67,7 @@ export default function BrowserWindow() {
         </div>
 
         {/* Browser Tabs Container */}
-        <div className="flex items-end space-x-1 sm:space-x-1.5 select-none relative overflow-visible">
+        <div className="flex items-end space-x-1 sm:space-x-1.5 select-none relative overflow-visible flex-1 sm:flex-initial">
           {(["experience", "education", "contributions"] as TabType[]).map((tab) => {
             const isActive = activeTab === tab;
             const tabName = tab === "contributions" ? "activity" : tab;
@@ -75,14 +75,14 @@ export default function BrowserWindow() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3 py-1.5 sm:px-5 sm:py-2 rounded-t-lg text-[10px] sm:text-xs font-mono font-bold tracking-wide uppercase transition-all duration-200 cursor-pointer border-t border-x flex items-center gap-1.5 group ${
+                className={`flex-1 sm:flex-none justify-center px-2 py-1.5 sm:px-5 sm:py-2 rounded-t-lg text-[10px] sm:text-xs font-mono font-bold tracking-wide uppercase transition-all duration-200 cursor-pointer border-t border-x flex items-center gap-1 sm:gap-1.5 group ${
                   isActive
                     ? "bg-card-custom text-foreground border-border-custom -mb-[1px] relative z-10"
                     : "bg-zinc-200/30 dark:bg-zinc-900/40 text-zinc-500 dark:text-muted-text border-transparent hover:bg-zinc-200/70 dark:hover:bg-zinc-900/75 hover:text-foreground"
                 }`}
               >
                 <span>{tabName}</span>
-                <div className="relative group/tab-x" onMouseEnter={handleIconHover}>
+                <div className="hidden sm:block relative group/tab-x" onMouseEnter={handleIconHover}>
                   <X
                     size={14}
                     className={`rounded-sm p-0.5 transition-all duration-200 shrink-0 ${
@@ -105,7 +105,7 @@ export default function BrowserWindow() {
 
           {/* New Tab (+) Icon */}
           <div 
-            className="relative group/plus pb-1.5 sm:pb-2 px-2 text-zinc-400 dark:text-zinc-600 hover:text-foreground transition-colors cursor-not-allowed self-end mb-0.5"
+            className="hidden sm:block relative group/plus pb-1.5 sm:pb-2 px-2 text-zinc-400 dark:text-zinc-600 hover:text-foreground transition-colors cursor-not-allowed self-end mb-0.5"
             onMouseEnter={handleIconHover}
           >
             <Plus size={14} />
@@ -119,7 +119,7 @@ export default function BrowserWindow() {
       {/* Browser Navigation / URL Control Bar */}
       <div className="bg-zinc-50 dark:bg-[#171815] px-4 py-2 border-b border-border-custom flex items-center justify-start gap-4 transition-colors duration-300 relative overflow-visible">
         {/* Back / Forward / Refresh controls */}
-        <div className="flex items-center space-x-2 sm:space-x-3 text-zinc-400 dark:text-zinc-600">
+        <div className="hidden sm:flex items-center space-x-2 sm:space-x-3 text-zinc-400 dark:text-zinc-600">
           <button 
             disabled 
             className="p-1 hover:text-foreground/45 rounded transition-colors disabled:opacity-40"
@@ -161,7 +161,7 @@ export default function BrowserWindow() {
       </div>
 
       {/* Browser Page Screen Content */}
-      <div className="p-4 sm:p-8 md:p-12 min-h-[500px] relative bg-card-custom transition-colors duration-300 rounded-b-xl">
+      <div className="p-5 sm:p-8 md:p-12 min-h-[400px] sm:min-h-[500px] relative bg-card-custom transition-colors duration-300 rounded-b-xl">
         <AnimatePresence mode="wait">
           {/* EXPERIENCE TAB */}
           {activeTab === "experience" && (
