@@ -70,7 +70,7 @@ export default function Home() {
                   href="/resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-6 py-3 rounded-full border border-accent-custom bg-accent-light/50 dark:bg-accent-light/5 text-accent-custom hover:bg-accent-custom hover:text-white transition-all duration-300 text-xs font-mono tracking-wide"
+                  className="flex items-center gap-3 px-6 py-3 rounded-full bg-accent-custom text-background border border-accent-custom hover:bg-background hover:text-accent-custom transition-all duration-300 text-xs font-mono tracking-wide"
                 >
                   <Download size={14} />
                   <span>Download CV</span>
