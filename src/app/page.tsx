@@ -10,6 +10,8 @@ import SkillsSection from "../components/SkillsSection";
 import ProjectShowcase from "../components/ProjectShowcase";
 import BlogFeed from "../components/BlogFeed";
 import ContactSection from "../components/ContactSection";
+import StatsBar from "../components/StatsBar";
+import OrganizationalImpact from "../components/OrganizationalImpact";
 import { Download, FileText, ArrowRight, ExternalLink } from "lucide-react";
 
 // Dynamically load CustomCursor to avoid SSR issues
@@ -94,6 +96,9 @@ export default function Home() {
                 orchestrating AI-augmented monorepos at scale.
               </p>
 
+              {/* Stats Bar */}
+              <StatsBar />
+
               {/* Action buttons */}
               <div className="flex flex-wrap gap-4 pt-4">
                 <a
@@ -140,6 +145,9 @@ export default function Home() {
 
             {/* Browser Tab Container */}
             <BrowserWindow />
+
+            {/* Organizational Impact hover cards */}
+            <OrganizationalImpact />
           </div>
         </section>
 

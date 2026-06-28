@@ -165,7 +165,7 @@ export const portfolioData: PortfolioData = {
     {
       id: "epam-lead",
       type: "experience",
-      role: "Lead Software Engineer & Solutions Architect",
+      role: "Lead Software Engineer",
       company: "EPAM SYSTEMS",
       period: "Dec 2020 - Present",
       description: "Architecting event-driven MACH platforms for global clients from greenfield Next.js storefronts to serverless edge delivery across 170+ countries — while leading cross-functional teams and pioneering AI developer tooling.",
